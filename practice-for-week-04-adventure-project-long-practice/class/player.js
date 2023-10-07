@@ -1,4 +1,6 @@
 const { Food } = require('./food');
+const { Room } = require('./room')
+const { Item } = require('./item')
 
 class Player {
 
@@ -27,7 +29,7 @@ class Player {
             console.log(`${this.name} is not carrying anything.`);
         } else {
             console.log(`${this.name} is carrying:`);
-            for (let i = 0 ; i < this.items.length ; i++) {
+            for (let i = 0; i < this.items.length; i++) {
                 console.log(`  ${this.items[i].name}`);
             }
         }
@@ -36,13 +38,27 @@ class Player {
     takeItem(itemName) {
         // Picks up an item from the current room into the player's inventory
 
-        // Your code here
+        for (let i = 0; i < this.currentRoom.items.length; i++) {
+            let each = this.currentRoom.items[i];
+            if (each['name'] === itemName) {
+                this.currentRoom.items.splice(i)
+                this.items.push(each)
+                return this.items
+            }
+        }
+
     }
 
     dropItem(itemName) {
-        // Drops an item the player is holding into their current room
 
-        // Your code here
+        for (let i = 0; i < this.items.length; i++) {
+            let each = this.items[i];
+            if (each['name'] === itemName) {
+                this.items.splice(i)
+                this.currentRoom.items.push(each)
+                return this.currentRoom.items
+            }
+        }
     }
 
     eatItem(itemName) {
@@ -54,10 +70,22 @@ class Player {
     getItemByName(name) {
         // Retrieves an item from a player's inventory by item name
 
-        // Your code here
+        for (let i = 0; i < this.items.length; i++) {
+            let each = this.items[i];
+            if (each['name'] === name) {
+                return each;
+            }
+        }
     }
 }
+let item = new Item("sword", "just a sword");
+let room = new Room("Room 2", "A second test room");
+let player = new Player("player2", room);
+
+
+console.log(player.takeItem('sword'))
+
 
 module.exports = {
-  Player,
+    Player,
 };
